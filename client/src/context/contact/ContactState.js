@@ -31,7 +31,7 @@ const ContactState = props => {
 
         try {
             const res = await axios.get('/api/contacts')
-            console.log('res.data',res.data)
+            console.log('res.data', res.data)
             dispatch({
                 type: GET_CONTACTS,
                 payload: res.data
@@ -70,8 +70,20 @@ const ContactState = props => {
     }
 
     // Delete contact
-    const deleteContact = id => {
-        dispatch({ type: DELETE_CONTACT, payload: id })
+    const deleteContact = async id => {
+        try {
+            await axios.delete(`/api/contacts/${id}`)
+            dispatch({
+                type: DELETE_CONTACT,
+                payload: id
+            })
+        } catch (err) {
+            dispatch({
+                type: CONTACT_ERROR,
+                payload: err.response.msg
+            })
+        }
+
     }
 
     // Clear Contacts
